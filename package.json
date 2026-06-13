@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start"
   },
+  "engines": {
+    "node": ">=20.x"
+  },
   "dependencies": {
     "echarts": "^6.1.0",
     "echarts-for-react": "^3.0.6",
