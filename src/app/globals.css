@@ -76,3 +76,28 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+/* Markdown body 样式（report 渲染区） */
+.md-body { word-wrap: break-word; }
+.md-body h1 { font-size: 1.6em; font-weight: 700; margin: 0.8em 0 0.5em; color: inherit; border-bottom: 2px solid rgba(249,115,22,0.3); padding-bottom: 0.3em; }
+.md-body h2 { font-size: 1.3em; font-weight: 700; margin: 1em 0 0.4em; color: inherit; }
+.md-body h3 { font-size: 1.1em; font-weight: 600; margin: 0.8em 0 0.3em; color: inherit; }
+.md-body h4 { font-size: 1em; font-weight: 600; margin: 0.6em 0 0.2em; }
+.md-body p  { margin: 0.5em 0; line-height: 1.75; }
+.md-body strong { color: #ea580c; font-weight: 700; }
+.dark .md-body strong { color: #fb923c; }
+.md-body em { color: #6366f1; font-style: italic; }
+.md-body ul { list-style: disc; padding-left: 1.5em; margin: 0.5em 0; }
+.md-body ol { list-style: decimal; padding-left: 1.5em; margin: 0.5em 0; }
+.md-body li { margin: 0.25em 0; line-height: 1.7; }
+.md-body code { background: rgba(249,115,22,0.1); color: #c2410c; padding: 0.15em 0.4em; border-radius: 4px; font-size: 0.9em; }
+.dark .md-body code { background: rgba(251,146,60,0.15); color: #fdba74; }
+.md-body pre { background: #1e293b; color: #e2e8f0; padding: 1em; border-radius: 8px; overflow-x: auto; margin: 0.8em 0; font-size: 0.85em; }
+.md-body pre code { background: transparent; color: inherit; padding: 0; }
+.md-body blockquote { border-left: 4px solid #f97316; padding: 0.4em 1em; margin: 0.8em 0; background: rgba(249,115,22,0.05); color: inherit; font-style: italic; border-radius: 0 6px 6px 0; }
+.md-body hr { border: none; border-top: 1px dashed rgba(148,163,184,0.4); margin: 1.2em 0; }
+.md-body table { border-collapse: collapse; margin: 0.8em 0; width: 100%; font-size: 0.92em; }
+.md-body th, .md-body td { border: 1px solid rgba(148,163,184,0.3); padding: 0.5em 0.8em; text-align: left; }
+.md-body th { background: rgba(249,115,22,0.08); font-weight: 600; }
+.md-body a { color: #ea580c; text-decoration: underline; text-decoration-style: dotted; }
+.dark .md-body a { color: #fb923c; }
