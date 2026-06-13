@@ -1,5 +1,5 @@
 {
-  "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm run build",
+  "installCommand": "npm install --no-audit --no-fund --prefer-offline --legacy-peer-deps",
+  "buildCommand": "npm run build",
   "framework": "nextjs"
 }
