@@ -9,6 +9,8 @@ import HistoryDrawer from '@/components/HistoryDrawer';
 import { saveHistory, type HistoryItem } from '@/lib/history';
 import { exportNodeToPdf } from '@/lib/pdf';
 import type { IndexTrend } from '@/lib/trends';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 type Tab = 'review' | 'morning' | 'stock';
 const TABS: Array<{ id: Tab; label: string; emoji: string; desc: string }> = [
@@ -499,9 +501,9 @@ export default function Home() {
               </button>
             </div>
             <article ref={reportRef} className="anim-in bg-white dark:bg-slate-800 rounded-xl p-4 sm:p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-              <pre className="whitespace-pre-wrap font-sans text-sm sm:text-[15px] leading-relaxed text-slate-700 dark:text-slate-200">
-                {report}
-              </pre>
+              <div className="md-body text-sm sm:text-[15px] leading-relaxed text-slate-700 dark:text-slate-200">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{report}</ReactMarkdown>
+              </div>
             </article>
           </>
         )}
