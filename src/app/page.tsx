@@ -7,8 +7,10 @@ import ThemeToggle from '@/components/ThemeToggle';
 import StockSearch, { type StockSuggestion } from '@/components/StockSearch';
 import HistoryDrawer from '@/components/HistoryDrawer';
 import Modal from '@/components/Modal';
-import KlineChart from '@/components/KlineChart';
+import StockChartModal from '@/components/StockChartModal';
 import SectorDetailModal from '@/components/SectorDetailModal';
+import ZTPoolModal from '@/components/ZTPoolModal';
+import HeatmapModal from '@/components/HeatmapModal';
 import { saveHistory, type HistoryItem } from '@/lib/history';
 import { exportNodeToPdf } from '@/lib/pdf';
 import type { IndexTrend } from '@/lib/trends';
@@ -78,6 +80,8 @@ export default function Home() {
   const [sectorModal, setSectorModal] = useState<{ bk: string; name: string } | null>(null);
   const [newsModal, setNewsModal] = useState<{ title: string; time: string; url?: string; digest?: string } | null>(null);
   const [klineModal, setKlineModal] = useState<{ secid: string; name: string } | null>(null);
+  const [ztPoolOpen, setZtPoolOpen] = useState(false);
+  const [heatmapOpen, setHeatmapOpen] = useState(false);
 
   // 页面加载即拉一次行情快照（不需要 LLM Key）
   useEffect(() => {
@@ -336,14 +340,21 @@ export default function Home() {
               </div>
               <div className="border-t border-slate-100 dark:border-slate-700 pt-3">
                 <div className="flex items-center justify-between text-xs mb-2">
-                  <span className="text-slate-500">🔥 涨停板池</span>
+                  <button
+                    onClick={() => setZtPoolOpen(true)}
+                    className="text-slate-500 hover:text-orange-500 transition flex items-center gap-1"
+                    title="点击查看完整涨停池"
+                  >
+                    🔥 涨停板池 <span className="text-[10px] opacity-60">详情→</span>
+                  </button>
                   <span className="font-semibold text-orange-500">
                     {snapshot.ztSummary.total} 家 · 最高 {snapshot.ztSummary.maxLb} 连板
                   </span>
                 </div>
                 <div className="space-y-1.5">
                   {snapshot.ztSummary.top10.slice(0, 4).map((s) => (
-                    <div key={s.name} className="flex items-center gap-2 text-xs">
+                    <div key={s.name} className="flex items-center gap-2 text-xs cursor-pointer hover:bg-orange-50/50 dark:hover:bg-slate-700/40 px-1 -mx-1 rounded transition"
+                      onClick={() => setZtPoolOpen(true)}>
                       <span className="px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-300 font-bold min-w-[36px] text-center">
                         {s.lbCount}板
                       </span>
@@ -377,7 +388,15 @@ export default function Home() {
                 ))}
               </div>
               <div className="border-t border-slate-100 dark:border-slate-700 pt-3">
-                <div className="text-xs text-slate-500 mb-2">🚀 热门板块</div>
+                <div className="flex items-center justify-between mb-2">
+                  <button
+                    onClick={() => setHeatmapOpen(true)}
+                    className="text-xs text-slate-500 hover:text-orange-500 transition flex items-center gap-1"
+                    title="查看全行业板块热力图"
+                  >
+                    🚀 热门板块 <span className="text-[10px] opacity-60">热力图→</span>
+                  </button>
+                </div>
                 <div className="flex flex-wrap gap-1.5">
                   {snapshot.hotSectors.slice(0, 6).map((s) => (
                     <button
@@ -564,10 +583,31 @@ export default function Home() {
       )}
 
       {klineModal && (
-        <Modal open={true} title={`${klineModal.name} K线`} width="max-w-4xl" onClose={() => setKlineModal(null)}>
-          <KlineChart secid={klineModal.secid} name={klineModal.name} />
-        </Modal>
+        <StockChartModal
+          open={true}
+          secid={klineModal.secid}
+          name={klineModal.name}
+          onClose={() => setKlineModal(null)}
+        />
       )}
+
+      <ZTPoolModal
+        open={ztPoolOpen}
+        onClose={() => setZtPoolOpen(false)}
+        onPickStock={(s) => {
+          setZtPoolOpen(false);
+          setKlineModal({ secid: `${s.market}.${s.code}`, name: s.name });
+        }}
+      />
+
+      <HeatmapModal
+        open={heatmapOpen}
+        onClose={() => setHeatmapOpen(false)}
+        onPickSector={(s) => {
+          setHeatmapOpen(false);
+          setSectorModal({ bk: s.code, name: s.name });
+        }}
+      />
     </div>
   );
 }
