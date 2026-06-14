@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   if (!bk) return NextResponse.json({ ok: false, error: 'bk required' }, { status: 400 });
 
   try {
-    const url = `https://push2delay.eastmoney.com/api/qt/clist/get?pn=1&pz=80&po=1&np=1&fltt=2&invt=2&fid=f3&fs=b:${bk}+f:!50&fields=f12,f14,f2,f3,f15,f16,f62,f184`;
+    const url = `https://push2delay.eastmoney.com/api/qt/clist/get?pn=1&pz=80&po=1&np=1&fltt=2&invt=2&fid=f3&fs=b:${bk}+f:!50&fields=f12,f14,f2,f3,f15,f16,f62,f184,f6,f13`;
     const r = await fetch(url, {
       cache: 'no-store',
       headers: { Referer: 'https://quote.eastmoney.com/' },
@@ -22,6 +22,8 @@ export async function GET(req: NextRequest) {
       high: Number(d.f15) || 0,
       low: Number(d.f16) || 0,
       mainNet: Number(d.f62) || 0,
+      amount: Number(d.f6) || 0,
+      market: Number(d.f13) || 0,
     }));
     const total = j?.data?.total || stocks.length;
     const up = stocks.filter((s: { changePct: number }) => s.changePct > 0).length;
