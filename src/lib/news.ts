@@ -6,6 +6,7 @@ export interface FastNews {
   title: string;
   summary: string;
   time: string;
+  url?: string;
   stocks: Array<{ code: string; name: string }>;
 }
 
@@ -38,6 +39,7 @@ export async function getFastNews(limit = 15): Promise<FastNews[]> {
     title: (n.title as string) ?? '',
     summary: (n.summary as string) ?? '',
     time: (n.showTime as string) ?? '',
+    url: (n.url_w as string) || (n.url as string) || undefined,
     stocks: ((n.stockList as Array<Record<string, unknown>>) ?? []).map((s) => ({
       code: (s.code as string) ?? '',
       name: (s.name as string) ?? '',

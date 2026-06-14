@@ -2,189 +2,172 @@
 
 # 📈 StockGPT Review
 
-**AI-powered A-Share market review tool · 100% client-side · BYOK (Bring Your Own Key)**
+**AI 盘后复盘助手 · 一键生成今日 A 股市场报告**
 
-**AI 驱动的 A 股盘后复盘助手 · 纯客户端 · 自带 API Key · 零服务器成本**
+[English](#english) · [中文](#中文)
 
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)](https://vercel.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61dafb?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript)](https://www.typescriptlang.org/)
+[![BYOK](https://img.shields.io/badge/LLM-BYOK-f97316)](https://github.com/27dream/stockgpt-review)
 
-[English](#-english) · [中文](#-中文) · [Live Demo](https://stockgpt-review.vercel.app) · [Report Bug](https://github.com/27dream/stockgpt-review/issues)
+[🚀 Live Demo](https://stockgpt-review-three.vercel.app) · [🐛 Report Bug](https://github.com/27dream/stockgpt-review/issues) · [💬 Discuss](https://github.com/27dream/stockgpt-review/discussions)
 
-![Screenshot Light](./screenshots/home.png)
+![home](docs/screenshots/01-home.png)
 
 </div>
 
 ---
 
-## 🇨🇳 中文
+## 中文
 
-### ✨ 这是什么？
+**StockGPT Review** 是一个完全开源的 AI 盘后复盘工具。零后端成本（数据全部用东方财富免费 API），零账号体系（LLM API Key 仅存浏览器 localStorage），打开网页即用。
 
-**一个让 AI 帮你写 A 股盘后复盘的网页工具**。打开网页 → 填你自己的 LLM API Key → 一键生成专业复盘报告。
+### ✨ 功能亮点
 
-- 🧠 **三大场景**：盘后复盘 / 早盘策略 / 个股诊断
-- 📊 **数据全免费**：东方财富延时行情接口（指数 / 涨停板 / 板块 / 快讯 / 个股 / 资金流）
-- 🔑 **BYOK · 零成本**：用你自己的 API Key（OpenAI / DeepSeek / Moonshot / 智谱 / 通义），Key 仅存浏览器
-- 🌗 **明暗主题**：自动跟随系统 + 手动切换
-- 📥 **PDF 导出**：报告一键导出 A4 PDF
-- 📜 **历史报告**：自动保存最近 10 份在浏览器本地
-- 🎨 **可视化**：三大指数分时图 + 板块热力图（ECharts）
-- 🚀 **可一键部署到 Vercel**
+- 📊 **盘后复盘**：一键拉取指数 / 资金流 / 涨停池 / 板块 / 快讯，AI 生成 Markdown 报告
+- 🌅 **早盘策略**：基于隔夜消息和昨日数据的开盘备忘
+- 🔍 **个股诊断**：搜索任意 A 股代码或名称，AI 给出结构化诊断
+- 📈 **可视化**：板块热力图（Treemap）、三大指数分时图、个股 K 线（日/周/月 + MA + 成交量）
+- 🖱️ **强交互**：点击板块查看成分股、点个股弹 K 线、点快讯看原文
+- 🌓 **暗黑模式**：next-themes 自适应
+- 📤 **导出**：PNG / PDF（html2canvas-pro + jspdf）
+- 🔐 **隐私优先**：你的 API Key 永不离开浏览器，服务端只做数据中转
+- 🔌 **BYOK**：支持 OpenAI / DeepSeek / Moonshot / 智谱 GLM / 通义千问 任意 OpenAI 兼容接口
 
 ### 🖼️ 截图
 
-| 浅色主题 | 深色主题 |
+| 浅色模式 | 深色模式 |
 |---|---|
-| ![](./screenshots/home.png) | ![](./screenshots/home-dark.png) |
+| ![light](docs/screenshots/01-home.png) | ![dark](docs/screenshots/02-dark.png) |
 
 ### 🚀 快速开始
-
-#### 1. 在线体验
-👉 **[stockgpt-review.vercel.app](https://stockgpt-review.vercel.app)**
-
-#### 2. 本地运行
 
 ```bash
 git clone https://github.com/27dream/stockgpt-review.git
 cd stockgpt-review
-npm install
-npm run dev
-# 打开 http://localhost:3000
+pnpm install   # 或 npm install --legacy-peer-deps
+pnpm dev
+# 访问 http://localhost:3000
 ```
 
-#### 3. 一键部署到 Vercel
+打开网页 → 选服务商 → 填 API Key（免费的 DeepSeek 就够用）→ 保存 → 点"一键生成"。
+
+### 🏗️ 一键部署到 Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/27dream/stockgpt-review)
 
-### 🔑 LLM 配置
+无需配置环境变量，免费版 Hobby 即可承载。
 
-打开网页 → 点 ⚙️ 设置 → 选预设服务商 → 填 API Key → 保存。
+### 🛠 技术栈
 
-支持任何 **OpenAI 兼容协议** 的服务：
+- **框架**：Next.js 16 App Router (Turbopack)
+- **UI**：React 19 + Tailwind CSS 4 + next-themes
+- **图表**：ECharts 6 + echarts-for-react
+- **导出**：html2canvas-pro + jspdf
+- **数据源**：东方财富延时行情免费 API（`push2delay` / `push2his` / `np-listapi` / `searchapi`）
+- **LLM**：任意 OpenAI 兼容接口（流式 SSE）
 
-| 服务商 | Base URL | 推荐模型 |
-|---|---|---|
-| OpenAI | `https://api.openai.com/v1` | `gpt-4o-mini` |
-| DeepSeek | `https://api.deepseek.com/v1` | `deepseek-chat` |
-| Moonshot | `https://api.moonshot.cn/v1` | `moonshot-v1-8k` |
-| 智谱 GLM | `https://open.bigmodel.cn/api/paas/v4` | `glm-4-flash` |
-| 通义千问 | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-turbo` |
+### 📡 数据来源
 
-> 💡 **API Key 仅存于你的浏览器 localStorage**，绝不发送到我们的服务器。
+全部为东方财富网公开延时行情接口，**不依赖任何付费数据源**：
 
-### 🏗️ 技术栈
-
-- **框架**：Next.js 16 (App Router) + React 19 + TypeScript 5
-- **样式**：Tailwind CSS 4 + next-themes
-- **图表**：ECharts 6
-- **PDF**：html2canvas-pro + jsPDF
-- **数据源**：东方财富 push2delay / push2his / np-listapi / push2ex / searchapi
-- **部署**：Vercel（也支持 Netlify / 自托管）
+| 接口 | 用途 |
+|---|---|
+| `push2delay.eastmoney.com` | 指数 / 个股延时行情、资金流 |
+| `push2his.eastmoney.com` | K 线数据（前端浏览器直连） |
+| `np-listapi.eastmoney.com` | 7×24 财经快讯 |
+| `push2ex.eastmoney.com` | 涨停板池 |
+| `searchapi.eastmoney.com` | 个股搜索 |
+| `emappdata.eastmoney.com` | 板块成分股 |
 
 ### 📁 项目结构
 
 ```
 src/
 ├── app/
-│   ├── api/
-│   │   ├── review/route.ts      # LLM 流式生成（review/morning/stock）
-│   │   ├── search/route.ts      # 个股搜索
-│   │   └── stock/route.ts       # 个股行情
-│   ├── layout.tsx
-│   └── page.tsx                 # 主页面
+│   ├── api/            # 数据中转（market / hot / sector / stock / search / review）
+│   └── page.tsx        # 主页
 ├── components/
-│   ├── IndexTrendChart.tsx      # 指数分时
-│   ├── SectorHeatmap.tsx        # 板块热力图
-│   ├── StockSearch.tsx          # 个股搜索
-│   ├── HistoryDrawer.tsx        # 历史抽屉
-│   └── ThemeToggle.tsx
+│   ├── KlineChart.tsx          # K 线（日/周/月 + MA + 成交量）
+│   ├── SectorHeatmap.tsx       # 板块热力图
+│   ├── IndexTrendChart.tsx     # 三大指数分时
+│   ├── SectorDetailModal.tsx   # 板块成分股弹层
+│   ├── HistoryDrawer.tsx       # 历史报告抽屉
+│   └── Modal.tsx               # 通用弹层
 └── lib/
-    ├── eastmoney.ts             # 东财 API 封装
-    ├── stock.ts                 # 个股数据
-    ├── trends.ts                # 指数分时
-    ├── prompt.ts                # 三套 Prompt 模板
-    ├── history.ts               # 历史报告 (localStorage)
-    └── pdf.ts                   # PDF 导出
+    ├── eastmoney.ts            # 东财 API 封装
+    ├── news.ts                 # 快讯 + 涨停池
+    └── llm.ts                  # LLM 流式调用
 ```
 
-### 🤝 贡献
+### ⚖️ 免责声明
 
-欢迎 PR！如果觉得有用，请给个 ⭐️ ~
+本项目仅用于个人学习研究，所有数据来自东方财富网公开延时行情接口。**报告由 AI 生成，不构成任何投资建议**，盈亏自负。
 
-### ⚠️ 免责声明
+### 📜 协议
 
-数据来自东方财富延时行情，**仅供学习参考，不构成投资建议**。投资有风险，入市需谨慎。
-
-### 📄 License
-
-MIT © [27dream](https://github.com/27dream)
+MIT
 
 ---
 
-## 🇬🇧 English
+## English
 
-### ✨ What is this?
+**StockGPT Review** is a fully open-source AI-powered Chinese A-share post-market review tool. **Zero backend cost** (all data from EastMoney free APIs), **zero account system** (LLM API key stored only in browser localStorage), works out of the box.
 
-**An AI web app that writes daily A-Share market review for you.** Open page → fill in your own LLM API key → generate professional review with one click.
+### ✨ Features
 
-- 🧠 **3 Modes**: After-market review / Pre-market briefing / Single stock diagnosis
-- 📊 **Free Data**: East Money delayed-quote APIs (indices / limit-up / sectors / news / stocks / fund flow)
-- 🔑 **BYOK · Zero Cost**: Use your own API key (OpenAI / DeepSeek / Moonshot / GLM / Qwen), key stays in browser
-- 🌗 **Light/Dark theme**: System-aware + manual toggle
-- 📥 **PDF Export**: One-click A4 PDF export
-- 📜 **History**: Auto-save last 10 reports in browser
-- 🎨 **Charts**: Index intraday + sector heatmap (ECharts)
-- 🚀 **One-click Vercel deploy**
+- 📊 **Post-Market Review** — one-click pull of indices / capital flow / limit-up pool / sectors / news, AI generates Markdown report
+- 🌅 **Pre-Market Strategy** — opening memo based on overnight news
+- 🔍 **Stock Diagnosis** — search any A-share by code or name, get structured AI analysis
+- 📈 **Charts** — sector treemap, intraday index lines, stock K-line (D/W/M + MA + volume)
+- 🖱️ **Interactive** — click sector to see constituents, click stock for K-line modal, click news for full text
+- 🌓 **Dark Mode** — auto via next-themes
+- 📤 **Export** — PNG / PDF
+- 🔐 **Privacy-first** — your API key never leaves the browser
+- 🔌 **BYOK** — any OpenAI-compatible endpoint (OpenAI / DeepSeek / Moonshot / Zhipu / Qwen)
 
 ### 🚀 Quick Start
-
-#### Try Online
-👉 **[stockgpt-review.vercel.app](https://stockgpt-review.vercel.app)**
-
-#### Run Locally
 
 ```bash
 git clone https://github.com/27dream/stockgpt-review.git
 cd stockgpt-review
-npm install
-npm run dev
-# open http://localhost:3000
+pnpm install   # or: npm install --legacy-peer-deps
+pnpm dev
 ```
 
-#### Deploy to Vercel
+Open `http://localhost:3000`, pick a provider, paste your API key (DeepSeek's free tier is enough), hit save, then click **"One-click generate"**.
+
+### 🏗 Deploy to Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/27dream/stockgpt-review)
 
-### 🔑 Configure LLM
+No env vars needed. Free Hobby tier handles it.
 
-Click ⚙️ Settings → choose provider preset → fill API key → save.
+### 🛠 Tech Stack
 
-Any **OpenAI-compatible** endpoint works (OpenAI / DeepSeek / Moonshot / GLM / Qwen).
-
-> 💡 Your API key is stored **only in browser localStorage**, never sent to our server.
-
-### 🏗️ Tech Stack
-
-Next.js 16 · TypeScript · Tailwind v4 · ECharts · html2canvas-pro · jsPDF · East Money APIs · Vercel
+- Next.js 16 (Turbopack) + React 19 + TypeScript 5
+- Tailwind CSS 4 + next-themes
+- ECharts 6
+- html2canvas-pro + jspdf
+- EastMoney free delayed market data API
+- Any OpenAI-compatible LLM via streaming SSE
 
 ### ⚠️ Disclaimer
 
-Data from East Money delayed quotes. **For educational purposes only, NOT investment advice.**
+For educational/research purposes only. **AI-generated reports are not investment advice.** Use at your own risk.
 
-### 📄 License
+### 📜 License
 
-MIT © [27dream](https://github.com/27dream)
+MIT
 
 ---
 
 <div align="center">
 
-**If you find this useful, please ⭐️ Star the repo!**
+If this project helps you, please give it a ⭐️ — it really matters!
 
-**觉得有用？麻烦点个 ⭐️ ～**
+Built with ❤️ for the open-source community
 
 </div>

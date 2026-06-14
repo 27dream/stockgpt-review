@@ -22,13 +22,13 @@ export async function GET() {
       indexTrends,
       topInflow,
       topOutflow,
-      hotSectors,
+      hotSectors: hotSectors.map((s) => ({ name: s.name, change: s.change, code: s.code })),
       ztSummary: {
         total: ztPool.length,
         maxLb: ztPool.reduce((m, s) => Math.max(m, s.lbCount), 0),
         top10: [...ztPool].sort((a, b) => b.lbCount - a.lbCount).slice(0, 10),
       },
-      news: news.slice(0, 10),
+      news: news.slice(0, 10).map((n) => ({ title: n.title, time: n.time, url: n.url, digest: n.summary })),
     });
   } catch (e) {
     return NextResponse.json(

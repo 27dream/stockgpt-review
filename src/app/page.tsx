@@ -6,6 +6,9 @@ import SectorHeatmap from '@/components/SectorHeatmap';
 import ThemeToggle from '@/components/ThemeToggle';
 import StockSearch, { type StockSuggestion } from '@/components/StockSearch';
 import HistoryDrawer from '@/components/HistoryDrawer';
+import Modal from '@/components/Modal';
+import KlineChart from '@/components/KlineChart';
+import SectorDetailModal from '@/components/SectorDetailModal';
 import { saveHistory, type HistoryItem } from '@/lib/history';
 import { exportNodeToPdf } from '@/lib/pdf';
 import type { IndexTrend } from '@/lib/trends';
@@ -41,8 +44,8 @@ interface MarketSnapshot {
     maxLb: number;
     top10: Array<{ name: string; lbCount: number; industry: string; sealFund: number }>;
   };
-  hotSectors: Array<{ name: string; change: number }>;
-  news: Array<{ title: string; time: string }>;
+  hotSectors: Array<{ name: string; change: number; code?: string }>;
+  news: Array<{ title: string; time: string; url?: string; digest?: string }>;
 }
 
 const PRESETS = [
@@ -70,6 +73,11 @@ export default function Home() {
   const [showHistory, setShowHistory] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const reportRef = useRef<HTMLDivElement>(null);
+
+  // 弹层状态
+  const [sectorModal, setSectorModal] = useState<{ bk: string; name: string } | null>(null);
+  const [newsModal, setNewsModal] = useState<{ title: string; time: string; url?: string; digest?: string } | null>(null);
+  const [klineModal, setKlineModal] = useState<{ secid: string; name: string } | null>(null);
 
   // 页面加载即拉一次行情快照（不需要 LLM Key）
   useEffect(() => {
@@ -355,7 +363,12 @@ export default function Home() {
               </h3>
               <div className="space-y-2 mb-4 max-h-32 overflow-y-auto">
                 {snapshot.news.slice(0, 5).map((n, i) => (
-                  <div key={i} className="text-xs leading-relaxed">
+                  <div
+                    key={i}
+                    className="text-xs leading-relaxed cursor-pointer hover:bg-orange-50/50 dark:hover:bg-slate-700/40 px-1 py-0.5 -mx-1 rounded transition"
+                    onClick={() => setNewsModal(n)}
+                    title="点击查看详情"
+                  >
                     <span className="text-orange-500 font-mono mr-1.5">
                       {n.time?.slice(11, 16) || '--:--'}
                     </span>
@@ -367,16 +380,19 @@ export default function Home() {
                 <div className="text-xs text-slate-500 mb-2">🚀 热门板块</div>
                 <div className="flex flex-wrap gap-1.5">
                   {snapshot.hotSectors.slice(0, 6).map((s) => (
-                    <span
+                    <button
                       key={s.name}
-                      className={`px-2 py-0.5 rounded-md text-xs ${
+                      onClick={() => s.code && setSectorModal({ bk: s.code, name: s.name })}
+                      disabled={!s.code}
+                      className={`px-2 py-0.5 rounded-md text-xs transition hover:scale-105 ${
                         s.change >= 0
-                          ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300'
-                          : 'bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-300'
-                      }`}
+                          ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50'
+                          : 'bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50'
+                      } ${s.code ? 'cursor-pointer' : 'cursor-default'}`}
+                      title={s.code ? '点击查看成分股' : ''}
                     >
                       {s.name} {s.change >= 0 ? '+' : ''}{s.change.toFixed(2)}%
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -522,6 +538,36 @@ export default function Home() {
         </footer>
       </div>
       <HistoryDrawer open={showHistory} onClose={() => setShowHistory(false)} onPick={onPickHistory} />
+
+      {sectorModal && (
+        <SectorDetailModal
+          open={true}
+          bk={sectorModal.bk}
+          sectorName={sectorModal.name}
+          onPickStock={(s) => setKlineModal({ secid: `${s.market}.${s.code}`, name: s.name })}
+          onClose={() => setSectorModal(null)}
+        />
+      )}
+
+      {newsModal && (
+        <Modal open={true} title={newsModal.title} onClose={() => setNewsModal(null)}>
+          <div className="text-xs text-slate-400 mb-2">{newsModal.time}</div>
+          <div className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed whitespace-pre-wrap">
+            {newsModal.digest || '（无摘要）'}
+          </div>
+          {newsModal.url && (
+            <a href={newsModal.url} target="_blank" rel="noreferrer" className="inline-block mt-4 text-sm text-orange-500 hover:underline">
+              查看原文 →
+            </a>
+          )}
+        </Modal>
+      )}
+
+      {klineModal && (
+        <Modal open={true} title={`${klineModal.name} K线`} width="max-w-4xl" onClose={() => setKlineModal(null)}>
+          <KlineChart secid={klineModal.secid} name={klineModal.name} />
+        </Modal>
+      )}
     </div>
   );
 }
