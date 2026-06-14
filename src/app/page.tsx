@@ -11,6 +11,11 @@ import StockChartModal from '@/components/StockChartModal';
 import SectorDetailModal from '@/components/SectorDetailModal';
 import ZTPoolModal from '@/components/ZTPoolModal';
 import HeatmapModal from '@/components/HeatmapModal';
+import StrategyLab from '@/components/StrategyLab';
+import BacktestPanel from '@/components/BacktestPanel';
+import SignalMonitor from '@/components/SignalMonitor';
+import NotificationConfig from '@/components/NotificationConfig';
+import type { StrategyDSL } from '@/lib/dsl';
 import { saveHistory, type HistoryItem } from '@/lib/history';
 import { exportNodeToPdf } from '@/lib/pdf';
 import type { IndexTrend } from '@/lib/trends';
@@ -65,6 +70,12 @@ export default function Home() {
     model: PRESETS[1].model,
   });
   const [showSettings, setShowSettings] = useState(false);
+  const [showStrategyLab, setShowStrategyLab] = useState(false);
+  const [showBacktest, setShowBacktest] = useState(false);
+  const [showMonitor, setShowMonitor] = useState(false);
+  const [showNotifyConfig, setShowNotifyConfig] = useState(false);
+  const [currentDSL, setCurrentDSL] = useState<StrategyDSL | null>(null);
+  const [monitorCodes, setMonitorCodes] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState('');
   const [error, setError] = useState('');
@@ -214,6 +225,15 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <ThemeToggle />
+            <button
+              onClick={() => setShowStrategyLab(true)}
+              aria-label="策略实验室"
+              title="策略实验室 + 回测 + 盯盘"
+              className="press w-10 h-10 sm:w-auto sm:px-4 sm:py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm hover:shadow-md flex items-center justify-center"
+            >
+              <span className="sm:hidden">🧪</span>
+              <span className="hidden sm:inline">🧪 策略</span>
+            </button>
             <button
               onClick={() => setShowHistory(true)}
               aria-label="历史"
@@ -608,6 +628,51 @@ export default function Home() {
           setSectorModal({ bk: s.code, name: s.name });
         }}
       />
+
+      {/* 🧪 策略实验室套件 */}
+      <StrategyLab
+        open={showStrategyLab}
+        onClose={() => setShowStrategyLab(false)}
+        onRunBacktest={(dsl) => {
+          setCurrentDSL(dsl);
+          setShowStrategyLab(false);
+          setShowBacktest(true);
+        }}
+        onAddToMonitor={(dsl) => {
+          setCurrentDSL(dsl);
+          setShowStrategyLab(false);
+          setShowMonitor(true);
+        }}
+        initialDSL={currentDSL}
+      />
+      <BacktestPanel
+        open={showBacktest}
+        onClose={() => setShowBacktest(false)}
+        dsl={currentDSL}
+      />
+      <Modal open={showMonitor} onClose={() => setShowMonitor(false)} title="📡 实时盯盘" width="max-w-5xl">
+        <div className="space-y-3">
+          <div className="flex gap-2 text-xs">
+            <input
+              className="flex-1 border rounded px-2 py-1"
+              placeholder="代码用逗号分隔，如 sh600519,sz000001"
+              value={monitorCodes.join(',')}
+              onChange={(e) => setMonitorCodes(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+            />
+            <button
+              onClick={() => setShowNotifyConfig(true)}
+              className="px-2 py-1 border rounded hover:bg-gray-50"
+            >🔔 配置推送</button>
+          </div>
+          <SignalMonitor
+            watchCodes={monitorCodes}
+            notifyEnabled={true}
+          />
+        </div>
+      </Modal>
+      <Modal open={showNotifyConfig} onClose={() => setShowNotifyConfig(false)} title="🔔 通知配置" width="max-w-5xl">
+        <NotificationConfig onClose={() => setShowNotifyConfig(false)} />
+      </Modal>
     </div>
   );
 }
