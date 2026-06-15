@@ -24,6 +24,24 @@
 
 **StockGPT Review** 是一个完全开源的 AI 盘后复盘工具。零后端成本（数据全部用东方财富免费 API），零账号体系（LLM API Key 仅存浏览器 localStorage），打开网页即用。
 
+### 🏗️ 架构流程图
+
+```mermaid
+flowchart LR
+    A[👤 用户浏览器] -->|输入 LLM API Key<br/>BYOK 仅存 localStorage| B[Next.js 16 前端]
+    B -->|/api/eastmoney<br/>数据中转| C[东方财富 免费 API]
+    C -->|指数 / 资金流 / 涨停池<br/>板块 / 快讯| B
+    B -->|流式调用| D{LLM Provider}
+    D -.OpenAI / DeepSeek<br/>Moonshot / GLM / Qwen.-> E[AI 生成 Markdown 报告]
+    E --> F[📊 盘后复盘 / 早盘策略 / 个股诊断]
+    F -->|html2canvas + jspdf| G[📤 PNG / PDF 导出]
+
+    style A fill:#fde68a,stroke:#f59e0b
+    style C fill:#bfdbfe,stroke:#3b82f6
+    style D fill:#fecaca,stroke:#ef4444
+    style F fill:#bbf7d0,stroke:#22c55e
+```
+
 ### ✨ 功能亮点
 
 - 📊 **盘后复盘**：一键拉取指数 / 资金流 / 涨停池 / 板块 / 快讯，AI 生成 Markdown 报告
