@@ -76,6 +76,18 @@ pnpm dev
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/27dream/stockgpt-review)
 
+### 🔗 联动生态（决策 → 自动下单）
+
+StockGPT Review 是**只读复盘**工具。配合下面三个项目可以打通"AI 看报告 → 自动下单 → 风控护栏"完整闭环：
+
+| 项目 | 职责 |
+|---|---|
+| 📡 [mcp-eastmoney](https://github.com/27dream/mcp-eastmoney) | 给 Claude/Cursor 提供 A 股 MCP 数据底座 |
+| 🚀 [mx-trader-bridge](https://github.com/27dream/mx-trader-bridge) | AI 决策落地为妙想模拟盘真实下单 |
+| 🛡️ [mx-risk-guard](https://github.com/27dream/mx-risk-guard) | 下单前过风控护栏（仓位/止损/熔断） |
+
+📚 完整集成教程：[`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md)
+
 无需配置环境变量，免费版 Hobby 即可承载。
 
 ### 🛠 技术栈
